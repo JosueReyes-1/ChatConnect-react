@@ -3,9 +3,9 @@ import { Message } from "./Message"
 
 export const ChatContainer = ({ setInputMessage, inputMessage, socket,messages,clientId}) => {
     return (
-        <div className="flex justify-center items-center h-3/4 mt-20">
-            <div className="bg-white drop-shadow-2xl rounded-2xl h-[90%] w-3/4 flex flex-wrap justify-center">
-                <div className="w-full px-10 h-20 flex items-center border-b-2 border-gray-50">
+        <div className="flex justify-center items-center h-[90%] md:h-3/4  md:mt-20">
+            <div className="bg-white drop-shadow-2xl rounded-2xl h-[90%] md:w-3/4 flex flex-wrap justify-center w-[90%]">
+                <div className="w-full px-10 h-[10%] flex items-center border-b-2 border-gray-50">
                     <h1 className="text-blue-950 font-bold text-2xl">Grupo</h1>
                 </div>
                 <div className="w-5/6 h-[90%] flex flex-col justify-end ">
