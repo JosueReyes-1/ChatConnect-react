@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { useState } from "react";
+import { ChatContainer } from "./components/ChatContainer"
+import { Header } from "./components/Header"
+import { useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const [messages, setMessages] = useState([]);
+    const [inputMessage, setInputMessage] = useState('');
+    const [socket, setSocket] = useState(null);
+    const [clientId, setClientId] = useState(null);
+    useEffect(() => {
+        const newSocket = new WebSocket('wss://f3zuv1ax80.execute-api.us-east-1.amazonaws.com/production')
+        setSocket(newSocket)
+        const id = uuidv4();
+        setClientId(id)
+    }, []);
+
+    useEffect(() => {
+        if(socket!==null){
+            socket.onmessage = function (event) {
+                const newMessage = {
+                    message: event.data
+                }
+                console.log(newMessage);
+                // setMessages([...messages,newMessage])
+                setMessages(prevMessages => [...prevMessages, newMessage]);
+                console.log(`[message] Datos recibidos del servidor: ${event.data}`);
+            };
+        }
+    }, [socket]);
+    return (
+        <div className="max-h-[100vh] h-[100vh]">
+            <Header />
+            <ChatContainer
+                setInputMessage={setInputMessage}
+                inputMessage={inputMessage}
+                socket={socket}
+                messages={messages}
+                clientId={clientId}
+            />
+        </div>
+    )
 }
 
 export default App
